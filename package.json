@@ -1,0 +1,26 @@
+{
+  "name": "zen-editor",
+  "version": "1.0.0",
+  "description": "A pure JS, inlined WYSIWYG HTML editor.",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hawschiat/zen-editor.git"
+  },
+  "keywords": [
+    "WYSIWYG",
+    "editor"
+  ],
+  "author": "Seng Chiat Haw",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hawschiat/zen-editor/issues"
+  },
+  "homepage": "https://github.com/hawschiat/zen-editor#readme",
+  "dependencies": {
+    "typescript": "^3.9.6"
+  }
+}
