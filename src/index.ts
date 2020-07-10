@@ -49,6 +49,9 @@ class ZenEditor extends HTMLElement {
     this.toggleToolbar();
   }
 
+  /**
+   * Trigger a process to either show or hide the toolbar
+   */
   private toggleToolbar() {
     if (this.hovered || this.focused) {
       this.toolbar.setAttribute("show", "true");
@@ -57,6 +60,9 @@ class ZenEditor extends HTMLElement {
     }
   }
 
+  /**
+   * Initialize editor element
+   */
   private createEditor(): HTMLDivElement {
     const editor = document.createElement("div");
     editor.classList.add("zen-editor");
@@ -149,7 +155,9 @@ class ZenToolbar extends HTMLElement {
     const boldButton = this.createIconButton(
       "bold-btn",
       "format_bold",
-      this.boldBtnClicked
+      (ev) => {
+        this.boldBtnClicked(ev);
+      }
     );
     const italicButton = this.createIconButton("italic-btn", "format_italic");
     const underlineButton = this.createIconButton(
@@ -178,18 +186,19 @@ class ZenToolbar extends HTMLElement {
   private createIconButton(
     id: string,
     iconName: string,
-    onClick: (ev: MouseEvent) => any = () => {}
+    clickHandler: (ev: MouseEvent) => any = () => {}
   ): HTMLButtonElement {
     const btn = document.createElement("button");
     btn.id = id;
     btn.classList.add("toolbar-btn", "material-icons");
     btn.textContent = iconName;
-    btn.onclick = onClick;
+    btn.onmousedown = clickHandler;
     return btn;
   }
 
-  private boldBtnClicked() {
-    this.dispatchEvent(new Event("bold-clicked"));
+  private boldBtnClicked(e: MouseEvent) {
+    this.dispatchEvent(new CustomEvent("bold-clicked", { bubbles: true }));
+    e.preventDefault();
   }
 }
 
