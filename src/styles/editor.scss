@@ -1,0 +1,9 @@
+:host {
+  display: inline-block;
+  min-width: 200px;
+  position: relative;
+
+  > .zen-editor {
+    border: 1px solid rgba($color: #000000, $alpha: 0.4);
+  }
+}

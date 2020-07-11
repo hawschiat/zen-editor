@@ -5,9 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "compile-styles": "node-sass --output-style compressed --source-map true --source-map-contents true --precision 6 src/styles/index.scss dist/styles/index.css",
-    "make-bundle": "browserify demo/main.js -t babelify --outfile demo/bundle.js",
-    "build": "tsc && npm run compile-styles && npm run make-bundle",
+    "build": "webpack  --config webpack.config.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -24,17 +22,21 @@
     "url": "https://github.com/hawschiat/zen-editor/issues"
   },
   "homepage": "https://github.com/hawschiat/zen-editor#readme",
-  "dependencies": {
-    "typescript": "^3.9.6"
-  },
   "devDependencies": {
     "@babel/core": "^7.10.4",
+    "@babel/plugin-transform-classes": "^7.10.4",
     "@types/node": "^14.0.19",
     "babel-preset-env": "^1.7.0",
-    "babelify": "^10.0.0",
-    "browserify": "^16.5.1",
+    "css-modules-typescript-loader": "^4.0.0",
     "node-sass": "^4.14.1",
+    "raw-loader": "^4.0.1",
+    "sass": "^1.26.10",
+    "sass-loader": "^9.0.2",
+    "ts-loader": "^8.0.0",
     "tslint": "^6.1.2",
-    "tslint-config-airbnb": "^5.11.2"
+    "tslint-config-airbnb": "^5.11.2",
+    "typescript": "^3.9.6",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.12"
   }
 }
