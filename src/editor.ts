@@ -28,7 +28,18 @@ export default class ZenEditor extends HTMLElement {
 
     this.onfocus = () => (this.focused = true);
     this.onblur = () => (this.focused = false);
-    this.toolbar.addEventListener("bold-clicked", this.boldSelection);
+    this.toolbar.addEventListener(ZenToolbar.BOLD_CLICKED_EVENT, () =>
+      document.execCommand("bold")
+    );
+    this.toolbar.addEventListener(ZenToolbar.ITALIC_CLICKED_EVENT, () =>
+      document.execCommand("italic")
+    );
+    this.toolbar.addEventListener(ZenToolbar.UNDERLINE_CLICKED_EVENT, () =>
+      document.execCommand("underline")
+    );
+    this.toolbar.addEventListener(ZenToolbar.STRIKETHROUGH_CLICKED_EVENT, () =>
+      document.execCommand("strikethrough")
+    );
   }
 
   get hovered() {
@@ -73,10 +84,6 @@ export default class ZenEditor extends HTMLElement {
     return editor;
   }
 
-  private boldSelection() {
-    document.execCommand("bold");
-  }
-
   private selectionHandler() {
     Object.entries(this.toolbar.common).forEach(([k, v]) =>
       v.removeAttribute("activated")
@@ -84,8 +91,6 @@ export default class ZenEditor extends HTMLElement {
 
     const selection = document.getSelection();
     if (selection) {
-      let shouldToggleBold = false;
-
       Array.from(Array(selection.rangeCount).keys()).forEach((i) => {
         const range = selection.getRangeAt(i);
 
@@ -104,18 +109,32 @@ export default class ZenEditor extends HTMLElement {
           nodesToCheck = this.getRangeNodes(range);
         }
 
-        if (
-          nodesToCheck.some((node) =>
+        // Activate toolbar buttons if the current selected text has certain properties (bold, italic, etc.)
+        nodesToCheck.forEach((node) => {
+          if (
             ["STRONG", "B"].some((k) => node.nodeName === k && node.textContent)
-          )
-        ) {
-          shouldToggleBold = true;
-        }
+          ) {
+            this.toolbar.common.boldButton.setAttribute("activated", "true");
+          }
+          if (
+            ["EM", "I"].some((k) => node.nodeName === k && node.textContent)
+          ) {
+            this.toolbar.common.italicButton.setAttribute("activated", "true");
+          }
+          if (node.nodeName === "U" && node.textContent) {
+            this.toolbar.common.underlineButton.setAttribute(
+              "activated",
+              "true"
+            );
+          }
+          if (node.nodeName === "STRIKE" && node.textContent) {
+            this.toolbar.common.strikethroughButton.setAttribute(
+              "activated",
+              "true"
+            );
+          }
+        });
       });
-
-      if (shouldToggleBold) {
-        this.toolbar.common.boldButton.setAttribute("activated", "true");
-      }
     }
   }
 

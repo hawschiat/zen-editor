@@ -1,6 +1,12 @@
 import toolbarStylesText from "./styles/toolbar.scss";
 
 export default class ZenToolbar extends HTMLElement {
+  // List of custom events dispatchable from this element
+  static BOLD_CLICKED_EVENT = "bold-clicked";
+  static ITALIC_CLICKED_EVENT = "italic-clicked";
+  static UNDERLINE_CLICKED_EVENT = "underline-clicked";
+  static STRIKETHROUGH_CLICKED_EVENT = "strikethrough-clicked";
+
   common: {
     boldButton: HTMLButtonElement;
     italicButton: HTMLButtonElement;
@@ -31,17 +37,29 @@ export default class ZenToolbar extends HTMLElement {
       "bold-btn",
       "format_bold",
       (ev) => {
-        this.boldBtnClicked(ev);
+        this.btnClicked(ZenToolbar.BOLD_CLICKED_EVENT, ev);
       }
     );
-    const italicButton = this.createIconButton("italic-btn", "format_italic");
+    const italicButton = this.createIconButton(
+      "italic-btn",
+      "format_italic",
+      (ev) => {
+        this.btnClicked(ZenToolbar.ITALIC_CLICKED_EVENT, ev);
+      }
+    );
     const underlineButton = this.createIconButton(
       "underline-btn",
-      "format_underline"
+      "format_underline",
+      (ev) => {
+        this.btnClicked(ZenToolbar.UNDERLINE_CLICKED_EVENT, ev);
+      }
     );
     const strikethroughButton = this.createIconButton(
       "strikethrough-btn",
-      "strikethrough_s"
+      "strikethrough_s",
+      (ev) => {
+        this.btnClicked(ZenToolbar.STRIKETHROUGH_CLICKED_EVENT, ev);
+      }
     );
 
     // Assign reference
@@ -71,8 +89,12 @@ export default class ZenToolbar extends HTMLElement {
     return btn;
   }
 
-  private boldBtnClicked(e: MouseEvent) {
-    this.dispatchEvent(new CustomEvent("bold-clicked", { bubbles: true }));
+  private btnClicked(eventName: string, e: MouseEvent) {
+    this.dispatchEvent(
+      new CustomEvent(eventName, {
+        bubbles: true,
+      })
+    );
     e.preventDefault();
   }
 }
