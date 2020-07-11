@@ -1,3 +1,5 @@
+import * as shadow from "shadow-selection-polyfill";
+
 import stylesText from "./styles/editor.scss";
 import ZenToolbar from "./toolbar";
 
@@ -80,7 +82,7 @@ export default class ZenEditor extends HTMLElement {
     editor.onmouseleave = () => (this.hovered = false);
     editor.onfocus = () => (this.focused = true);
     editor.onblur = () => (this.focused = false);
-    document.onselectionchange = () => this.selectionHandler();
+    document.addEventListener(shadow.eventName, () => this.selectionHandler());
     return editor;
   }
 
@@ -88,11 +90,15 @@ export default class ZenEditor extends HTMLElement {
     Object.entries(this.toolbar.common).forEach(([k, v]) =>
       v.removeAttribute("activated")
     );
-
-    const selection = document.getSelection();
+    let selection: Selection | null = null;
+    if (this.shadowRoot && this.shadowRoot.getSelection !== undefined) {
+      selection = this.shadowRoot.getSelection();
+    } else {
+      selection = document.getSelection();
+    }
     if (selection) {
       Array.from(Array(selection.rangeCount).keys()).forEach((i) => {
-        const range = selection.getRangeAt(i);
+        const range = selection!.getRangeAt(i);
 
         let nodesToCheck = [] as Node[];
         if (
